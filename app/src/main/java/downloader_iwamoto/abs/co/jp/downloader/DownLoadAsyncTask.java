@@ -3,45 +3,47 @@ package downloader_iwamoto.abs.co.jp.downloader;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 
 public class DownLoadAsyncTask extends AsyncTask<String, Void, Bitmap> {
 
+
     private Listener listener;
+    //  Context context;
 
     //非同期処理
     @Override
-    protected Bitmap doInBackground(String... strings) {
-        return downloadImage(strings[0]);
+    protected Bitmap doInBackground(String... params) {
+        return downloadImage(params[0]);
     }
 
     //途中経過をメインスレッドに返す
     @Override
-    protected void onProgressUpdate(Void... voids){
-        //working cursorを表示させるとよい
+    protected void onProgressUpdate(Void... values) {
+        //working cursor　を表示させるのもよい
     }
 
-    //非同期処理が終了後、結果をメインスレッドに返す
+    //非同期処理が終了後,結果をメインスレッドに返す
     @Override
-    protected void onPostExecute(Bitmap bitmap){
-        if (listener != null) listener.onSuccess(bitmap);
+    protected void onPostExecute(Bitmap bmp) {
+        if (listener != null){
+            listener.onSuccess(bmp);
+        }
     }
 
-    //イメージ取得用の処理
-    private Bitmap downloadImage(String address){
+    private Bitmap downloadImage(String address) {
         Bitmap bmp = null;
 
         final StringBuilder result = new StringBuilder();
         //初期化
         HttpURLConnection urlConnection = null;
 
-        try{
+        try {
             URL url = new URL(address);
             //HttpURLConnectionインスタンス生成
             urlConnection = (HttpURLConnection) url.openConnection();
@@ -63,7 +65,7 @@ public class DownLoadAsyncTask extends AsyncTask<String, Void, Bitmap> {
             urlConnection.connect();
             int resp = urlConnection.getResponseCode();
 
-            switch(resp){
+            switch (resp){
                 case HttpURLConnection.HTTP_OK:
                     InputStream is = null;
                     try {
@@ -77,7 +79,6 @@ public class DownLoadAsyncTask extends AsyncTask<String, Void, Bitmap> {
                             is.close();
                         }
                     }
-
                     break;
                 case HttpURLConnection.HTTP_UNAUTHORIZED:
                     break;
@@ -86,6 +87,7 @@ public class DownLoadAsyncTask extends AsyncTask<String, Void, Bitmap> {
             }
 
         } catch (Exception e) {
+            Log.d("debug", "downloadImage");
             e.printStackTrace();
         }finally {
             if (urlConnection != null){
@@ -100,6 +102,6 @@ public class DownLoadAsyncTask extends AsyncTask<String, Void, Bitmap> {
     }
 
     interface Listener{
-        void onSuccess(Bitmap bmp);
+        void onSuccess(Bitmap bpm);
     }
 }

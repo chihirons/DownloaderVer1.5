@@ -3,6 +3,7 @@ package downloader_iwamoto.abs.co.jp.downloader;
 import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,41 +13,42 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
 
     EditText Text;
-    Button Start;
+    Button Stert;
     ImageView View;
-    private DownLoadAsyncTask Task;
+    private DownLoadAsyncTask task;
 
-    Toast No;
-    Toast Ok;
-    String Url;
+    Toast no;
+    Toast ok;
+
+    String url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        No = Toast.makeText(this, "画像取得に失敗",Toast.LENGTH_SHORT);
-        Ok = Toast.makeText(this,"ダウンロードが完了しました",Toast.LENGTH_SHORT);
+        no = Toast.makeText(this,"画像取得に失敗",Toast.LENGTH_LONG);
+        ok = Toast.makeText(this,"ダウンロードが完了しました", Toast.LENGTH_LONG);
 
         //紐づけ
         Text = findViewById(R.id.text);
-        Start = findViewById(R.id.start);
+        Stert = findViewById(R.id.start);
         View = findViewById(R.id.view);
 
         //ダウンロード開始ボタンタップ時
-        Start.setOnClickListener(new View.OnClickListener() {
+        Stert.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                Url = Text.getText().toString();
+            public void onClick(View view) {
+                url = Text.getText().toString();
 
-                if(Url.length() != 0){
-                    //EditTextの文字が入っていた場合
-                    Task = new DownLoadAsyncTask();
+                if (url.length() != 0) {
+                    //EditTextに文字が入っている場合
+                    task = new DownLoadAsyncTask();
                     //Lisntenerを設定
-                    Task.setListener(createListener());
-                    Task.execute(Url);
+                    task.setListener(createListener());
+                    task.execute(url);
                 }else{
-                    No.show();
+                    no.show();
                 }
             }
         });
@@ -54,22 +56,23 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        Task.setListener(null);
+        task.setListener(null);
         super.onDestroy();
     }
 
     private DownLoadAsyncTask.Listener createListener(){
         return new DownLoadAsyncTask.Listener() {
             @Override
-            public void onSuccess(Bitmap bmp) {
-                View.setImageBitmap(bmp);
-                if (bmp == null) {
-                    No.show();
+            public void onSuccess(Bitmap bpm) {
+                View.setImageBitmap(bpm);
+                if (bpm == null){
+                    no.show();
                 }else{
-                    Ok.show();
+                    ok.show();
                 }
+                Log.d("BPMの中身", String.valueOf(bpm));
             }
         };
     }
-
 }
+

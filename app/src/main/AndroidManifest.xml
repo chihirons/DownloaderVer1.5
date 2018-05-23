@@ -2,7 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="downloader_iwamoto.abs.co.jp.downloader">
 
-    <uses-permission android:name="android.permission.INTERET" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
 
     <application
         android:allowBackup="true"
