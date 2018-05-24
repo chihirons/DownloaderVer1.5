@@ -12,9 +12,7 @@ import java.net.URL;
 
 public class DownLoadAsyncTask extends AsyncTask<String, Void, Bitmap> {
 
-
     private Listener listener;
-    //  Context context;
 
     //非同期処理
     @Override
